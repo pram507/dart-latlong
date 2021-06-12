@@ -1,4 +1,4 @@
-name: latlong2
+name: latlong
 description: Lightweight library for common latitude and longitude calculation
 homepage: https://github.com/jifalops/dart-latlong
 

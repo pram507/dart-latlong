@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:latlong2/spline.dart';
+import 'package:latlong/spline.dart';
 // import 'package:logging/logging.dart';
 
 // Browser
@@ -38,8 +38,7 @@ void main() async {
 
   group('CatmullRom 2D', () {
     test('> Simple values', () {
-      final spline = CatmullRomSpline2D(
-          Point2D(1, 1), Point2D(2, 2), Point2D(2, 2), Point2D(1, 1));
+      final spline = CatmullRomSpline2D(Point2D(1, 1), Point2D(2, 2), Point2D(2, 2), Point2D(1, 1));
 
       expect(spline.position(0.25).x, 2.09375);
       expect(spline.position(0.25).y, 2.09375);
@@ -54,16 +53,14 @@ void main() async {
     });
 
     test('> no Endpoints', () {
-      final spline =
-          CatmullRomSpline2D.noEndpoints(Point2D(1, 1), Point2D(2, 2));
+      final spline = CatmullRomSpline2D.noEndpoints(Point2D(1, 1), Point2D(2, 2));
 
       expect(spline.position(0.25).x, 1.203125);
       expect(spline.position(0.25).y, 1.203125);
     }); // end of 'no Endpoints' test
 
     test('> Exception', () {
-      final spline =
-          CatmullRomSpline2D.noEndpoints(Point2D(1, 1), Point2D(2, 2));
+      final spline = CatmullRomSpline2D.noEndpoints(Point2D(1, 1), Point2D(2, 2));
 
       expect(() => spline.position(3.0).x, throwsArgumentError);
     }); // end of 'Exception' test

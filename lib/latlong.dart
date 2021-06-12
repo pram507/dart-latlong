@@ -38,12 +38,11 @@
 ///
 /// ![Map](http://www.isobudgets.com/wp-content/uploads/2014/03/latitude-longitude.jpg)
 ///
-library latlong2;
+library latlong;
 
 import 'dart:math' as math;
 
-import 'package:latlong2/spline.dart';
-import 'package:intl/intl.dart';
+import 'spline.dart';
 
 part 'latlong/interfaces.dart';
 

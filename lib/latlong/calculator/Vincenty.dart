@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-part of latlong2;
+part of latlong;
 
 class Vincenty implements DistanceCalculator {
   // final Logger _logger = new Logger('latlong2.Vincenty');
@@ -30,9 +30,7 @@ class Vincenty implements DistanceCalculator {
   /// More on [Wikipedia](https://en.wikipedia.org/wiki/Vincenty%27s_formulae)
   @override
   double distance(final LatLng p1, final LatLng p2) {
-    var a = equatorRadius,
-        b = polarRadius,
-        f = flattening; // WGS-84 ellipsoid params
+    var a = equatorRadius, b = polarRadius, f = flattening; // WGS-84 ellipsoid params
 
     var l = p2.longitudeInRad - p1.longitudeInRad;
     var u1 = math.atan((1 - f) * math.tan(p1.latitudeInRad));
@@ -40,14 +38,7 @@ class Vincenty implements DistanceCalculator {
     var sinU1 = math.sin(u1), cosU1 = math.cos(u1);
     var sinU2 = math.sin(u2), cosU2 = math.cos(u2);
 
-    double sinLambda,
-        cosLambda,
-        sinSigma,
-        cosSigma,
-        sigma,
-        sinAlpha,
-        cosSqAlpha,
-        cos2SigmaM;
+    double sinLambda, cosLambda, sinSigma, cosSigma, sigma, sinAlpha, cosSqAlpha, cos2SigmaM;
     double lambda = l, lambdaP;
     var maxIterations = 200;
 
@@ -55,8 +46,7 @@ class Vincenty implements DistanceCalculator {
       sinLambda = math.sin(lambda);
       cosLambda = math.cos(lambda);
       sinSigma = math.sqrt((cosU2 * sinLambda) * (cosU2 * sinLambda) +
-          (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) *
-              (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda));
+          (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda));
 
       if (sinSigma == 0) {
         return 0.0; // co-incident points
@@ -78,11 +68,7 @@ class Vincenty implements DistanceCalculator {
           (1 - C) *
               f *
               sinAlpha *
-              (sigma +
-                  C *
-                      sinSigma *
-                      (cos2SigmaM +
-                          C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+              (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
     } while ((lambda - lambdaP).abs() > 1e-12 && --maxIterations > 0);
 
     if (maxIterations == 0) {
@@ -98,11 +84,7 @@ class Vincenty implements DistanceCalculator {
             B /
                 4 *
                 (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
-                    B /
-                        6 *
-                        cos2SigmaM *
-                        (-3 + 4 * sinSigma * sinSigma) *
-                        (-3 + 4 * cos2SigmaM * cos2SigmaM)));
+                    B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
 
     var dist = b * A * (sigma - deltaSigma);
 
@@ -113,8 +95,7 @@ class Vincenty implements DistanceCalculator {
   ///
   /// More on [Wikipedia](https://en.wikipedia.org/wiki/Vincenty%27s_formulae)
   @override
-  LatLng offset(
-      final LatLng from, final double distanceInMeter, final double bearing) {
+  LatLng offset(final LatLng from, final double distanceInMeter, final double bearing) {
     final equatorialRadius = equatorRadius;
 
     final latitude = from.latitudeInRad;
@@ -131,11 +112,9 @@ class Vincenty implements DistanceCalculator {
     final sigma1 = math.atan2(tanU1, cosAlpha1);
     final sinAlpha = cosU1 * sinAlpha1;
     final cosSqAlpha = 1 - sinAlpha * sinAlpha;
-    final dfUSq = cosSqAlpha *
-        (equatorialRadius * equatorialRadius - polarRadius * polarRadius) /
-        (polarRadius * polarRadius);
-    final a = 1 +
-        dfUSq / 16384 * (4096 + dfUSq * (-768 + dfUSq * (320 - 175 * dfUSq)));
+    final dfUSq =
+        cosSqAlpha * (equatorialRadius * equatorialRadius - polarRadius * polarRadius) / (polarRadius * polarRadius);
+    final a = 1 + dfUSq / 16384 * (4096 + dfUSq * (-768 + dfUSq * (320 - 175 * dfUSq)));
     final b = dfUSq / 1024 * (256 + dfUSq * (-128 + dfUSq * (74 - 47 * dfUSq)));
 
     var sigma = distanceInMeter / (polarRadius * a);
@@ -157,11 +136,7 @@ class Vincenty implements DistanceCalculator {
               b /
                   4 *
                   (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
-                      b /
-                          6 *
-                          cos2SigmaM *
-                          (-3 + 4 * sinSigma * sinSigma) *
-                          (-3 + 4 * cos2SigmaM * cos2SigmaM)));
+                      b / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
       sigmaP = sigma;
       sigma = distanceInMeter / (polarRadius * a) + deltaSigma;
     } while ((sigma - sigmaP).abs() > 1e-12 && --maxIterations > 0);
@@ -171,22 +146,16 @@ class Vincenty implements DistanceCalculator {
     }
 
     final tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;
-    final lat2 = math.atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,
-        (1 - flattening) * math.sqrt(sinAlpha * sinAlpha + tmp * tmp));
+    final lat2 = math.atan2(
+        sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1, (1 - flattening) * math.sqrt(sinAlpha * sinAlpha + tmp * tmp));
 
-    final lambda = math.atan2(
-        sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);
-    final c =
-        flattening / 16 * cosSqAlpha * (4 + flattening * (4 - 3 * cosSqAlpha));
+    final lambda = math.atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);
+    final c = flattening / 16 * cosSqAlpha * (4 + flattening * (4 - 3 * cosSqAlpha));
     final l = lambda -
         (1 - c) *
             flattening *
             sinAlpha *
-            (sigma +
-                c *
-                    sinSigma *
-                    (cos2SigmaM +
-                        c * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+            (sigma + c * sinSigma * (cos2SigmaM + c * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
 
     var lon2 = longitude + l;
     // print("LA ${radianToDeg(lat2)}, LO ${radianToDeg(lon2)}");

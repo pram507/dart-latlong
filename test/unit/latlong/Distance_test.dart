@@ -1,7 +1,7 @@
 //@TestOn("content-shell")
 import 'package:test/test.dart';
 
-import 'package:latlong2/latlong.dart';
+import 'package:latlong/latlong.dart';
 // import 'package:logging/logging.dart';
 
 // Browser
@@ -37,9 +37,7 @@ void main() {
       // no rounding
       expect(distance(p1, p2) ~/ 1000, equals(10001));
 
-      expect(
-          LengthUnit.Meter.to(LengthUnit.Kilometer, distance(p1, p2)).round(),
-          equals(10002));
+      expect(LengthUnit.Meter.to(LengthUnit.Kilometer, distance(p1, p2)).round(), equals(10002));
 
       // rounds to 10002
       expect(distance.as(LengthUnit.Kilometer, p1, p2), equals(10002));
@@ -51,8 +49,7 @@ void main() {
       final p1 = LatLng(0.0, 0.0);
       final p2 = LatLng(90.0, 0.0);
 
-      expect(
-          distance.as(LengthUnit.Kilometer, p1, p2), equals(10001.96572931165));
+      expect(distance.as(LengthUnit.Kilometer, p1, p2), equals(10001.96572931165));
     }); // end of 'Round' test
 
     test('> distance between 0,-180 and 0,180 is 0', () {
@@ -67,15 +64,9 @@ void main() {
       test('> Test 1', () {
         final distance = Distance();
 
-        expect(
-            distance(
-                LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444)),
-            422592);
+        expect(distance(LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444)), 422592);
 
-        expect(
-            distance.as(LengthUnit.Kilometer, LatLng(52.518611, 13.408056),
-                LatLng(51.519475, 7.46694444)),
-            423);
+        expect(distance.as(LengthUnit.Kilometer, LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444)), 423);
       });
     }); // End of 'Vincenty' group
 
@@ -83,10 +74,7 @@ void main() {
       test('> Test 1', () {
         final distance = Distance(calculator: const Haversine());
 
-        expect(
-            distance(
-                LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444)),
-            421786.0);
+        expect(distance(LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444)), 421786.0);
       });
     }); // End of 'Haversine' group
   });
@@ -131,8 +119,7 @@ void main() {
   }); // End of 'Direction' group
 
   group('Offset', () {
-    test('offset from 0,0 with bearing 0 and distance 10018.754 km is 90,180',
-        () {
+    test('offset from 0,0 with bearing 0 and distance 10018.754 km is 90,180', () {
       final distance = const Distance();
 
       final num distanceInMeter = (earthRadius * pi / 2).round();
@@ -148,8 +135,7 @@ void main() {
       expect(p2.longitude.round(), equals(180));
     });
 
-    test('offset from 0,0 with bearing 180 and distance ~ 5.000 km is -45,0',
-        () {
+    test('offset from 0,0 with bearing 180 and distance ~ 5.000 km is -45,0', () {
       final distance = const Distance();
       final num distanceInMeter = (earthRadius * pi / 4).round();
 
@@ -163,8 +149,7 @@ void main() {
       expect(p2.longitude.round(), equals(0));
     });
 
-    test('offset from 0,0 with bearing 180 and distance ~ 10.000 km is -90,180',
-        () {
+    test('offset from 0,0 with bearing 180 and distance ~ 10.000 km is -90,180', () {
       final distance = const Distance();
       final num distanceInMeter = (earthRadius * pi / 2).round();
 

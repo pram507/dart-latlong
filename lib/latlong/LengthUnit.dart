@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-part of latlong2;
+part of latlong;
 
 class LengthUnit {
   static const LengthUnit Millimeter = LengthUnit(1000.0);

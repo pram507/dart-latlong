@@ -18,7 +18,7 @@
  */
 
 import 'package:test/test.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong/latlong.dart';
 // import 'package:logging/logging.dart';
 
 // Browser
@@ -53,10 +53,8 @@ void main() {
     }); // end of 'Rad' test
 
     test('> toString', () {
-      expect((LatLng(-80.0, 0.0)).toString(),
-          'LatLng(latitude:-80.0, longitude:0.0)');
-      expect((LatLng(-80.123456, 0.0)).toString(),
-          'LatLng(latitude:-80.123456, longitude:0.0)');
+      expect((LatLng(-80.0, 0.0)).toString(), 'LatLng(latitude:-80.0, longitude:0.0)');
+      expect((LatLng(-80.123456, 0.0)).toString(), 'LatLng(latitude:-80.123456, longitude:0.0)');
     }); // end of 'toString' test
 
     test('> equal', () {

@@ -1,7 +1,7 @@
 //@TestOn("content-shell")
 import 'package:test/test.dart';
 
-import 'package:latlong2/latlong.dart';
+import 'package:latlong/latlong.dart';
 // import 'package:logging/logging.dart';
 
 // Browser
@@ -117,8 +117,7 @@ void main() {
       //_exportForGoogleEarth(steps);
       for (var index = 0; index < steps.nrOfCoordinates - 1; index++) {
         // 46?????
-        expect(distance(steps[index], steps[index + 1]),
-            inInclusiveRange(46, 112));
+        expect(distance(steps[index], steps[index + 1]), inInclusiveRange(46, 112));
       }
     }); // end of '10 intermediate steps in 1000m should have the same length' test
 
@@ -140,9 +139,7 @@ void main() {
       expect(steps.nrOfCoordinates, 4);
     }); // end of 'Path with 3 sections' test
 
-    test(
-        '> Reality Test - Westendorf, short, should 210m (same as Google Earth)',
-        () {
+    test('> Reality Test - Westendorf, short, should 210m (same as Google Earth)', () {
       final path = Path.from(westendorf);
       expect(path.distance, 210);
 
@@ -199,10 +196,7 @@ void main() {
     test('> Path lenght should be 3.377km', () {
       final path = Path.from(route);
 
-      expect(
-          round(LengthUnit.Meter.to(LengthUnit.Kilometer, path.distance),
-              decimals: 3),
-          3.377);
+      expect(round(LengthUnit.Meter.to(LengthUnit.Kilometer, path.distance), decimals: 3), 3.377);
     }); // end of 'Path length should be 3.377km' test
   }); // End of 'PathLength' group
 
@@ -245,8 +239,7 @@ void _exportForGoogleEarth(final Path steps, {final bool show = true}) {
 
     print('latitude,longitude,distance');
     for (var index = 0; index < steps.nrOfCoordinates - 1; index++) {
-      print(
-          '${steps[index].latitude}, ${steps[index].longitude}, ${distance(steps[index], steps[index + 1])}');
+      print('${steps[index].latitude}, ${steps[index].longitude}, ${distance(steps[index], steps[index + 1])}');
     }
 
     print('${steps.last.latitude}, ${steps.last.longitude}, 0');

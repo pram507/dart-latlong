@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-part of latlong2;
+part of latlong;
 
 class Haversine implements DistanceCalculator {
   // final Logger _logger = new Logger('latlong2.Haversine');
@@ -34,11 +34,7 @@ class Haversine implements DistanceCalculator {
     final sinDLng = math.sin((p2.longitudeInRad - p1.longitudeInRad) / 2);
 
     // Sides
-    final a = sinDLat * sinDLat +
-        sinDLng *
-            sinDLng *
-            math.cos(p1.latitudeInRad) *
-            math.cos(p2.latitudeInRad);
+    final a = sinDLat * sinDLat + sinDLng * sinDLng * math.cos(p1.latitudeInRad) * math.cos(p2.latitudeInRad);
     final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
 
     return equatorRadius * c;
@@ -58,19 +54,17 @@ class Haversine implements DistanceCalculator {
   ///     final p2 = distance.offset(p1, distanceInMeter, 180);
   ///
   @override
-  LatLng offset(
-      final LatLng from, final double distanceInMeter, final double bearing) {
+  LatLng offset(final LatLng from, final double distanceInMeter, final double bearing) {
     if (bearing < -180 || bearing > 180) {
-      throw ArgumentError.value(
-          bearing, 'bearing', 'Angle must be between -180 and 180 degrees');
+      throw ArgumentError.value(bearing, 'bearing', 'Angle must be between -180 and 180 degrees');
     }
 
     final h = degToRadian(bearing.toDouble());
 
     final a = distanceInMeter / equatorRadius;
 
-    final lat2 = math.asin(math.sin(from.latitudeInRad) * math.cos(a) +
-        math.cos(from.latitudeInRad) * math.sin(a) * math.cos(h));
+    final lat2 = math
+        .asin(math.sin(from.latitudeInRad) * math.cos(a) + math.cos(from.latitudeInRad) * math.sin(a) * math.cos(h));
 
     final lng2 = from.longitudeInRad +
         math.atan2(math.sin(h) * math.sin(a) * math.cos(from.latitudeInRad),

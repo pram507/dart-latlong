@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-part of latlong2;
+part of latlong;
 
 abstract class DistanceCalculator {
   double distance(final LatLng p1, final LatLng p2);
-  LatLng offset(
-      final LatLng from, final double distanceInMeter, final double bearing);
+  LatLng offset(final LatLng from, final double distanceInMeter, final double bearing);
 }

@@ -1,21 +1,19 @@
 import 'dart:math';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong/latlong.dart';
 
 void main() {
   var distance = Distance();
 
   // km = 423
-  final km = distance.as(LengthUnit.Kilometer, LatLng(52.518611, 13.408056),
-      LatLng(51.519475, 7.46694444));
+  final km = distance.as(LengthUnit.Kilometer, LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444));
 
   // meter = 422591.551
-  final meter =
-      distance(LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444));
+  final meter = distance(LatLng(52.518611, 13.408056), LatLng(51.519475, 7.46694444));
 
   print('km: $km, meter: $meter');
 
   distance = const Distance();
-  final num distanceInMeter = (EARTH_RADIUS * pi / 4).round();
+  final num distanceInMeter = (equatorRadius * pi / 4).round();
 
   final p1 = LatLng(0.0, 0.0);
   final p2 = distance.offset(p1, distanceInMeter, 180);

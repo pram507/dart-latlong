@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-part of latlong2;
+part of latlong;
 
 /// Necessary for creating new instances T extends LatLng (Path<T extends LatLng>)
 ///
@@ -29,8 +29,7 @@ part of latlong2;
 ///
 typedef LatLngFactory = LatLng Function(double latitude, double longitude);
 
-LatLng _defaultLatLngFactory(final double latitude, final double longitude) =>
-    LatLng(latitude, longitude);
+LatLng _defaultLatLngFactory(final double latitude, final double longitude) => LatLng(latitude, longitude);
 
 /// Path of [LatLng] values
 ///
@@ -55,8 +54,7 @@ class Path<T extends LatLng> {
       : _coordinates = [],
         _latLngFactory = factory;
 
-  Path.from(final Iterable<T> coordinates,
-      {final LatLngFactory factory = _defaultLatLngFactory})
+  Path.from(final Iterable<T> coordinates, {final LatLngFactory factory = _defaultLatLngFactory})
       : _coordinates = List<T>.from(coordinates),
         _latLngFactory = factory;
 
@@ -91,33 +89,26 @@ class Path<T extends LatLng> {
   ///
   /// If [smoothPath] is turned on than the minimum of 3 coordinates is required otherwise
   /// we need two
-  Path equalize(final double distanceInMeterPerTime,
-      {final bool smoothPath = true}) {
+  Path equalize(final double distanceInMeterPerTime, {final bool smoothPath = true}) {
     if (distanceInMeterPerTime <= 0) {
-      throw ArgumentError.value(distanceInMeterPerTime,
-          'distanceInMeterPerTime', 'Distance must be greater than 0');
+      throw ArgumentError.value(distanceInMeterPerTime, 'distanceInMeterPerTime', 'Distance must be greater than 0');
     }
-    if (!((smoothPath && _coordinates.length >= 3) ||
-        (!smoothPath && _coordinates.length >= 2))) {
+    if (!((smoothPath && _coordinates.length >= 3) || (!smoothPath && _coordinates.length >= 2))) {
       throw ArgumentError.value(smoothPath, 'smoothPath',
           'At least ${smoothPath ? 3 : 2} coordinates are needed to create the steps in between');
     }
 
     // If we "smooth" the path every second step becomes a spline - so every other step
     // becomes a "Keyframe". A step on the given path
-    final stepDistance = smoothPath
-        ? distanceInMeterPerTime * 2.0
-        : distanceInMeterPerTime.toDouble();
+    final stepDistance = smoothPath ? distanceInMeterPerTime * 2.0 : distanceInMeterPerTime.toDouble();
 
     final baseLength = distance;
     if (baseLength < stepDistance) {
-      throw ArgumentError(
-          'Path distance must be at least ${stepDistance}mn (step distance) but was $baseLength');
+      throw ArgumentError('Path distance must be at least ${stepDistance}mn (step distance) but was $baseLength');
     }
 
     if (stepDistance > baseLength / 2) {
-      print(
-          'Warning: Equalizing the path (L: $baseLength) with a key-frame distance of $stepDistance leads to'
+      print('Warning: Equalizing the path (L: $baseLength) with a key-frame distance of $stepDistance leads to'
           'weired results. Turn of path smooting.');
     }
 
@@ -136,24 +127,19 @@ class Path<T extends LatLng> {
     var baseStep = tempCoordinates.first;
 
     for (var index = 0; index < coordinates.length - 1; index++) {
-      final distance =
-          _distance(tempCoordinates[index], tempCoordinates[index + 1]);
+      final distance = _distance(tempCoordinates[index], tempCoordinates[index + 1]);
 
       // Remember the direction
-      bearing =
-          _distance.bearing(tempCoordinates[index], tempCoordinates[index + 1]);
+      bearing = _distance.bearing(tempCoordinates[index], tempCoordinates[index + 1]);
 
-      if (remainingSteps <= distance ||
-          (stepDistance - remainingSteps) <= distance) {
+      if (remainingSteps <= distance || (stepDistance - remainingSteps) <= distance) {
         // First step position
         var firstStepPos = stepDistance - remainingSteps;
 
         final steps = ((distance - firstStepPos) / stepDistance) + 1;
 
         final fullSteps = steps.toInt();
-        remainingSteps =
-            round(fullSteps > 0 ? steps % fullSteps : steps, decimals: 6) *
-                stepDistance;
+        remainingSteps = round(fullSteps > 0 ? steps % fullSteps : steps, decimals: 6) * stepDistance;
 
         baseStep = tempCoordinates[index];
 
@@ -161,8 +147,7 @@ class Path<T extends LatLng> {
           // Add step on the given path
           // Intermediate step is necessary to stay type-safe
           final tempStep = _distance.offset(baseStep, firstStepPos, bearing);
-          final nextStep =
-              _latLngFactory(tempStep.latitude, tempStep.longitude);
+          final nextStep = _latLngFactory(tempStep.latitude, tempStep.longitude);
           path.add(nextStep);
           firstStepPos += stepDistance;
 
@@ -177,12 +162,10 @@ class Path<T extends LatLng> {
               path.coordinates.insert(1, _pointToLatLng(spline.percentage(50)));
             } else if (path.nrOfCoordinates > 3) {
               final baseIndex = path.nrOfCoordinates - 1;
-              spline = _createSpline(path[baseIndex - 3], path[baseIndex - 2],
-                  path[baseIndex - 1], path[baseIndex]);
+              spline = _createSpline(path[baseIndex - 3], path[baseIndex - 2], path[baseIndex - 1], path[baseIndex]);
 
               // Insert new point at last position - 2 (pushes the next 2 items down)
-              path.coordinates
-                  .insert(baseIndex - 1, _pointToLatLng(spline.percentage(50)));
+              path.coordinates.insert(baseIndex - 1, _pointToLatLng(spline.percentage(50)));
             }
           }
         }
@@ -203,22 +186,20 @@ class Path<T extends LatLng> {
       // Last Spline between the last 4 elements
       var baseIndex = path.nrOfCoordinates - 1;
       if (baseIndex > 3) {
-        final spline = _createSpline(path[baseIndex - 3], path[baseIndex - 2],
-            path[baseIndex - 1], path[baseIndex - 0]);
+        final spline =
+            _createSpline(path[baseIndex - 3], path[baseIndex - 2], path[baseIndex - 1], path[baseIndex - 0]);
 
-        path.coordinates
-            .insert(baseIndex - 1, _pointToLatLng(spline.percentage(50)));
+        path.coordinates.insert(baseIndex - 1, _pointToLatLng(spline.percentage(50)));
       }
 
       // Check if there is a remaining gap between the last two elements - close it
       // Could be because of reminder from path divisions
       baseIndex = path.nrOfCoordinates - 1;
       if (_distance(path[baseIndex - 1], path[baseIndex]) >= stepDistance) {
-        final spline = _createSpline(path[baseIndex - 1], path[baseIndex - 1],
-            path[baseIndex - 0], path[baseIndex - 0]);
+        final spline =
+            _createSpline(path[baseIndex - 1], path[baseIndex - 1], path[baseIndex - 0], path[baseIndex - 0]);
 
-        path.coordinates
-            .insert(baseIndex, _pointToLatLng(spline.percentage(50)));
+        path.coordinates.insert(baseIndex, _pointToLatLng(spline.percentage(50)));
       }
     }
 
@@ -294,16 +275,11 @@ class Path<T extends LatLng> {
   //- private -----------------------------------------------------------------------------------
 
   /// 4 Points are necessary to create a [CatmullRomSpline2D]
-  CatmullRomSpline2D<double> _createSpline(
-      final LatLng p0, final LatLng p1, final LatLng p2, final LatLng p3) {
-    return CatmullRomSpline2D(
-        Point2D(p0.latitude, p0.longitude),
-        Point2D(p1.latitude, p1.longitude),
-        Point2D(p2.latitude, p2.longitude),
-        Point2D(p3.latitude, p3.longitude));
+  CatmullRomSpline2D<double> _createSpline(final LatLng p0, final LatLng p1, final LatLng p2, final LatLng p3) {
+    return CatmullRomSpline2D(Point2D(p0.latitude, p0.longitude), Point2D(p1.latitude, p1.longitude),
+        Point2D(p2.latitude, p2.longitude), Point2D(p3.latitude, p3.longitude));
   }
 
   /// Convert [Point2D] to [LatLng]
-  LatLng _pointToLatLng(final Point2D point) =>
-      _latLngFactory(point.x, point.y);
+  LatLng _pointToLatLng(final Point2D point) => _latLngFactory(point.x, point.y);
 }

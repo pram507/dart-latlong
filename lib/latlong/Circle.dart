@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-part of latlong2;
+part of latlong;
 
 /// Circle-base GEO algorithms.
 ///
@@ -29,8 +29,7 @@ class Circle {
   final LatLng center;
   final DistanceCalculator _calculator;
 
-  Circle(final this.center, this.radius,
-      {final DistanceCalculator calculator = const Vincenty()})
+  Circle(final this.center, this.radius, {final DistanceCalculator calculator = const Vincenty()})
       : _calculator = calculator;
 
   /// Checks if a [point] is inside the given [Circle]
